@@ -13,19 +13,23 @@
 
     <div class="wrapper">
       <div class="container">
-        <input type="text" placeholder="Inserisci il nome di un film">
-        <button id="search" type="button" name="button">Search</button>
+        <div class="search-bar">
+          <input type="text" placeholder="Inserisci il nome di un film">
+          <button id="search" type="button" name="button">Search</button>
+        </div>
 
-        <div class="movie-info"></div>
+        <div class="movie-container"></div>
       </div>
     </div>
 
 
     <script id="movie-template" type="text/x-handlebars-template">
-      <h2>Titolo: {{title}}</h2>
-      <h4>Titolo Originale: {{original_title}}</h4>
-      <span>Lingua Originale: {{language}}</span><br>
-      <span>Voto: {{vote}}</span>
+      <div class="movie-info">
+        <h2>Titolo: {{title}}</h2>
+        <h4>Titolo Originale: {{original_title}}</h4>
+        <span>Lingua Originale: {{language}}</span><br>
+        <span>Voto: {{vote}}</span>
+      </div>
     </script>
 
     <script type="text/javascript" src="js/script.js"></script>

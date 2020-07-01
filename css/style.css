@@ -14,11 +14,16 @@
 
 .container {
   width: 60%;
-  min-height: 600px;;
+  min-height: 600px;
   background-color: lightgrey;
   margin: 0 auto;
   text-align: center;
   padding: 20px 0;
+}
+
+.search-bar {
+  text-align: center;
+  width: 100%;
 }
 
 input {
@@ -29,4 +34,16 @@ input {
 button {
   width: 20%;
   height: 50px;
+}
+
+.movie-container {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.movie-info {
+  width: calc(100% / 4);
+  margin-top: 10px;
 }
