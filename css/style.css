@@ -14,7 +14,7 @@
 
 .container {
   width: 60%;
-  height: 600px;;
+  min-height: 600px;;
   background-color: lightgrey;
   margin: 0 auto;
   text-align: center;
