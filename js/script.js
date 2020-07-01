@@ -21,7 +21,10 @@ $(document).ready(function() {
 });
 
 // FUNCTIONS
-// Funzione di chiamata ajax e handlbars
+// Funzione di chiamata ajax e utilizzo di handlbars,
+// per ricerca e stampa di una lista di film
+// Argomento:
+//     --> valore di ricerca(una stringa), che andrà inserito nell'API
 function searchAndPrintMovies(valueQuery) {
   // Al click, faccio la chiamata ajax all'API,
   // e inserisco il valore dell'input come query di ricerca
@@ -37,17 +40,20 @@ function searchAndPrintMovies(valueQuery) {
       success: function(dataResponse) {
         var arrayMovies = dataResponse.results;
 
-        // Con handlebars copio il template della scheda film
-        // lo completo con un oggetto contente le info utili
-        // Lo appendo poi al container
+        // Resetto inizialmente il contenitore delle schede film che
+        // andrò a popolare
         $('.movie-container').html('');
 
+        // Con handlebars copio il template della scheda film
         var source = $('#movie-template').html();
         var template = Handlebars.compile(source);
 
+        // Creo un ciclo for per leggere tutti gli oggetti
+        // nell'arrayMovies
         for (var i = 0; i < arrayMovies.length; i++) {
-          console.log(arrayMovies[i].title);
 
+          // Completo il template con un oggetto contente le info utili,
+          // racchiuse negli oggeti risultanti da API
           var context = {
             title: arrayMovies[i].title,
             original_title: arrayMovies[i].original_title,
@@ -56,13 +62,16 @@ function searchAndPrintMovies(valueQuery) {
           };
           var html = template(context);
 
+          // Appendo poi il template al container
           $('.movie-container').append(html);
         }
 
+        // Alla fine resetto il paceholder dell'input
         $('input').val(''); //------------ TODO: rendere dinamico?
       },
       error: function(richiesta, stato, errori) {
-        alert('ERROR:' +  errori);
+        alert('ERROR');
+        // console.log(errori);
       }
     }
   );
