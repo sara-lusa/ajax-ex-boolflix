@@ -47,9 +47,10 @@ function searchMovies(valueQuery) {
         if(arrayMovies.length === 0) {
           var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
+        } else {
+          printMoviesAndSeries(arrayMovies, url);
         }
 
-        printMoviesAndSeries(arrayMovies, url);
       },
       error: function(richiesta, stato, errori) {
         var errorMessage;
@@ -88,12 +89,13 @@ function searchSeries(valueQuery) {
       success: function(dataResponse) {
         var arraySeries = dataResponse.results;
 
-        if(arrayMovies.length === 0) {
+        if(arraySeries.length === 0) {
           var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
+        } else {
+          printMoviesAndSeries(arraySeries, url);
         }
 
-        printMoviesAndSeries(arraySeries, url);
       },
       error: function(richiesta, stato, errori) {
         var errorMessage;
@@ -131,6 +133,13 @@ function printMoviesAndSeries(array, url) {
 
     var stars = getStars(voteFinal);
 
+    var language;
+    if(array[i].original_language === 'en') {
+      language = '<img src="img/en.png" alt="Flag"> <img src="img/us.png" alt="Flag">'
+    } else {
+      language ='<img src="img/' + array[i].original_language + '.png" alt="Flag">';
+    }
+
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
     // Qui completo per le serie tv
@@ -138,7 +147,7 @@ function printMoviesAndSeries(array, url) {
       var context = {
         title: array[i].name,
         original_title: array[i].original_name,
-        language: '<img src="img/' + array[i].original_language + '.png" alt="Flag">',
+        language: language,
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };
@@ -148,7 +157,7 @@ function printMoviesAndSeries(array, url) {
       var context = {
         title: array[i].title,
         original_title: array[i].original_title,
-        language: '<img src="img/' + array[i].original_language + '.png" alt="Flag">',
+        language: language,
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };
