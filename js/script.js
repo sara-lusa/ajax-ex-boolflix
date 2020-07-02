@@ -1,6 +1,3 @@
-// <i class="fas fa-star"></i> piena
-// <i class="far fa-star"></i> vuota
-
 $(document).ready(function() {
   // 9e3b41d15d625e280b597413a544c557
   // https://api.themoviedb.org/3/movie/550?api_key=9e3b41d15d625e280b597413a544c557
@@ -26,8 +23,8 @@ $(document).ready(function() {
 });
 
 // FUNCTIONS
-// Funzione di chiamata ajax e utilizzo di handlbars,
-// per ricerca e stampa di una lista di film
+/// Funzione di chiamata ajax per ricerca
+// e stampa di una lista di film tramite ulteriore funzione
 // Argomento:
 //     --> valore di ricerca(una stringa), che andrà inserito nell'API
 function searchMovies(valueQuery) {
@@ -69,6 +66,10 @@ function searchMovies(valueQuery) {
   );
 }
 
+// Funzione di chiamata ajax per ricerca
+// e stampa di una lista di serie tv tramite ulteriore funzione
+// Argomento:
+//     --> valore di ricerca(una stringa), che andrà inserito nell'API
 function searchSeries(valueQuery) {
   // Faccio la chiamata ajax all'API,
   // e inserisco il valore dell'input come query di ricerca
@@ -86,7 +87,7 @@ function searchSeries(valueQuery) {
       },
       success: function(dataResponse) {
         var arraySeries = dataResponse.results;
-        
+
         if(arrayMovies.length === 0) {
           var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
@@ -109,6 +110,10 @@ function searchSeries(valueQuery) {
   );
 }
 
+// Funzione che tilizza handlbars per stampare
+// singoli parti di oggetti di un array
+// Argomento:
+//     --> array di oggetti
 function printMoviesAndSeries(array, url) {
   // Resetto inizialmente il contenitore delle schede film che
   // andrò a popolare
@@ -128,6 +133,7 @@ function printMoviesAndSeries(array, url) {
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
+    // Qui completo per le serie tv
     if(url.includes('tv') ) {
       var context = {
         title: array[i].name,
@@ -136,7 +142,9 @@ function printMoviesAndSeries(array, url) {
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };
-    } else {
+    }
+    // Qui completo per i film
+    else {
       var context = {
         title: array[i].title,
         original_title: array[i].original_title,
@@ -155,6 +163,10 @@ function printMoviesAndSeries(array, url) {
   $('input').val(''); //------------ TODO: rendere dinamico?
 }
 
+// Funziona che stampa a schermo, utilizzando
+// handlebars, un messaggio di errore passatogli come Argomento
+// Argomento:
+//     --> stringa
 function printErrorMessage(message) {
   $('.error').html(''); //------------ TODO: rendere dinamico?
 
@@ -168,6 +180,11 @@ function printErrorMessage(message) {
   $('.error').append(html);
 }
 
+// Funziona che trasforma numeri decimali da 1 a 10
+// in un numeri interi da 1 a 5
+// Argomento:
+//     --> numero
+// return: numero diviso e arrotondato per eccesso
 function getVoteOneToFive(number) {
   var voteInteger = number / 2;
   var voteFinal = voteInteger.toFixed();
@@ -175,6 +192,12 @@ function getVoteOneToFive(number) {
   return voteFinal;
 }
 
+// Funziona che crea un array e lo riempie di un
+// numero preciso(number) di stelle piene, e poi
+// Ne aggiunge altre vuote, fino ad arrivare a 5 stelle totali(icone)
+// Argomento:
+//     --> numero, che indica quante stelle piene vuoi stampare
+// return: array di icone
 function getStars(number) {
   var arrayStars = [];
   for (var i = 0; i < number; i++) {

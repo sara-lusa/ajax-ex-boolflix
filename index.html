@@ -13,19 +13,27 @@
   <body>
 
     <div class="wrapper">
+      <!-- Inizio Container generale -->
       <div class="container">
+        <!-- Inizio Search-bar -->
         <div class="search-bar">
           <input type="text" placeholder="Inserisci il nome di un film">
           <button id="search" type="button" name="button">Search</button>
         </div>
+        <!--  Fine Search-bar -->
 
+        <!-- Avviso di errore -->
         <div class="error"></div>
+        <!-- Fine Avviso di errore -->
 
+        <!-- Inizio Movie and Serie container-->
         <div class="movie-container"></div>
+        <!-- Fine Movie and Serie container-->
       </div>
+      <!-- Fine Container generale -->
     </div>
 
-
+    <!-- Template scheda film -->
     <script id="movie-template" type="text/x-handlebars-template">
       <div class="movie-info">
         <div class="poster-case">
@@ -38,6 +46,7 @@
       </div>
     </script>
 
+    <!-- Template avviso di errore -->
     <script id="error-message-template" type="text/x-handlebars-template">
       <p>{{message}}</p>
     </script>
