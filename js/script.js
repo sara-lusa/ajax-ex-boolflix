@@ -1,3 +1,6 @@
+// <i class="fas fa-star"></i> piena
+// <i class="far fa-star"></i> vuota
+
 $(document).ready(function() {
   // 9e3b41d15d625e280b597413a544c557
   // https://api.themoviedb.org/3/movie/550?api_key=9e3b41d15d625e280b597413a544c557
@@ -28,7 +31,7 @@ $(document).ready(function() {
 function searchMovies(valueQuery) {
   // Faccio la chiamata ajax all'API,
   // e inserisco il valore dell'input come query di ricerca
-  var url = 'https://api.themviedb.org/3/search/movie';
+  var url = 'https://api.themoviedb.org/3/search/movie';
   var api_key = '9e3b41d15d625e280b597413a544c557';
 
   $.ajax(
@@ -47,7 +50,7 @@ function searchMovies(valueQuery) {
       },
       error: function(richiesta, stato, errori) {
         var errorMessage;
-        
+
         if(richiesta.status === 422) {
           errorMessage = 'Inserisci una chiave di ricerca.';
           printErrorMessage(errorMessage);
@@ -72,6 +75,8 @@ function printMovies(array) {
   // Creo un ciclo for per leggere tutti gli oggetti
   // nell'arrayMovies
   for (var i = 0; i < array.length; i++) {
+    var vote = array[i].vote_average;
+    var voteFinal = getVoteOneToFive(vote);
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
@@ -79,7 +84,7 @@ function printMovies(array) {
       title: array[i].title,
       original_title: array[i].original_title,
       language: array[i].original_language,
-      vote: array[i].vote_average,
+      vote: voteFinal,
     };
     var html = template(context);
 
@@ -102,4 +107,38 @@ function printErrorMessage(message) {
   };
   var html = template(context);
   $('.error').append(html);
+}
+
+function getVoteOneToFive(number) {
+  var voteInteger = number.toFixed();
+  var voteFinal;
+
+  switch (voteInteger) {
+    case "2":
+      voteFinal = 1;
+      break;
+
+    case "3", "4":
+      voteFinal = 2;
+      break;
+
+    case "5", "6":
+      voteFinal = 3;
+      break;
+
+    case "7", "8":
+      voteFinal = 4;
+      break;
+
+    case "9", "10":
+      voteFinal = 5;
+      break;
+
+  }
+
+  return voteFinal;
+}
+
+function getStars(number) {
+  
 }
