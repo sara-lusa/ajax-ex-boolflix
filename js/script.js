@@ -85,8 +85,8 @@ function printMovies(array) {
     var context = {
       title: array[i].title,
       original_title: array[i].original_title,
-      language: array[i].original_language,
-      vote: stars,
+      language: '<img src="img/' + array[i].original_language + '.png">',
+      vote: stars, // TODO: stampare senza virgole con ciclo??
     };
     var html = template(context);
 
