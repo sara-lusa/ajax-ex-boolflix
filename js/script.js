@@ -10,6 +10,7 @@ $(document).ready(function() {
     // Dichiaro in una variabile il valore dell'input
     var valueQuery = $('input').val();
 
+    var url =
     searchMovies(valueQuery);
   });
 
@@ -47,6 +48,41 @@ function searchMovies(valueQuery) {
         var arrayMovies = dataResponse.results;
 
         printMovies(arrayMovies);
+      },
+      error: function(richiesta, stato, errori) {
+        var errorMessage;
+
+        if(richiesta.status === 422) {
+          errorMessage = 'Inserisci una chiave di ricerca.';
+          printErrorMessage(errorMessage);
+        } else {
+          errorMessage = 'Ops, qualcosa è andato storto: error ' + richiesta.status;
+          printErrorMessage(errorMessage);
+        }
+      }
+    }
+  );
+}
+
+function searchSeries(valueQuery) {
+  // Faccio la chiamata ajax all'API,
+  // e inserisco il valore dell'input come query di ricerca
+  var url = 'https://api.themoviedb.org/3/search/tv';
+  var api_key = '9e3b41d15d625e280b597413a544c557';
+
+  $.ajax(
+    {
+      url: url,
+      method: 'GET',
+      data: {
+        api_key: api_key,
+        query: valueQuery,
+        language: 'it-IT'
+      },
+      success: function(dataResponse) {
+        var arraySeries = dataResponse.results;
+
+        printMovies(arraySeries);
       },
       error: function(richiesta, stato, errori) {
         var errorMessage;
