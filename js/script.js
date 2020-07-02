@@ -10,8 +10,8 @@ $(document).ready(function() {
     // Dichiaro in una variabile il valore dell'input
     var valueQuery = $('input').val();
 
-    var url =
     searchMovies(valueQuery);
+    searchSeries(valueQuery);
   });
 
   $('input').keypress(function(event) {
@@ -20,6 +20,7 @@ $(document).ready(function() {
       var valueQuery = $('input').val();
 
       searchMovies(valueQuery);
+      searchSeries(valueQuery);
     }
   });
 });
@@ -47,7 +48,7 @@ function searchMovies(valueQuery) {
       success: function(dataResponse) {
         var arrayMovies = dataResponse.results;
 
-        printMovies(arrayMovies);
+        printMoviesAndSeries(arrayMovies, url);
       },
       error: function(richiesta, stato, errori) {
         var errorMessage;
@@ -82,7 +83,7 @@ function searchSeries(valueQuery) {
       success: function(dataResponse) {
         var arraySeries = dataResponse.results;
 
-        printMovies(arraySeries);
+        printMoviesAndSeries(arraySeries, url);
       },
       error: function(richiesta, stato, errori) {
         var errorMessage;
@@ -99,7 +100,7 @@ function searchSeries(valueQuery) {
   );
 }
 
-function printMovies(array) {
+function printMoviesAndSeries(array, url) {
   // Resetto inizialmente il contenitore delle schede film che
   // andrò a popolare
   $('.movie-container').html('');
@@ -118,12 +119,23 @@ function printMovies(array) {
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
-    var context = {
-      title: array[i].title,
-      original_title: array[i].original_title,
-      language: '<img src="img/' + array[i].original_language + '.png">',
-      vote: stars, // TODO: stampare senza virgole con ciclo??
-    };
+    if(url.includes('tv') ) {
+      var context = {
+        title: array[i].name,
+        original_title: array[i].original_name,
+        language: '<img src="img/' + array[i].original_language + '.png">',
+        vote: stars,
+        poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
+      };
+    } else {
+      var context = {
+        title: array[i].title,
+        original_title: array[i].original_title,
+        language: '<img src="img/' + array[i].original_language + '.png">',
+        vote: stars,
+        poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
+      };
+    }
     var html = template(context);
 
     // Appendo poi il template al container
@@ -148,31 +160,8 @@ function printErrorMessage(message) {
 }
 
 function getVoteOneToFive(number) {
-  var voteInteger = number.toFixed();
-  var voteFinal;
-
-  switch (voteInteger) {
-    case "2":
-      voteFinal = 1;
-      break;
-
-    case "3", "4":
-      voteFinal = 2;
-      break;
-
-    case "5", "6":
-      voteFinal = 3;
-      break;
-
-    case "7", "8":
-      voteFinal = 4;
-      break;
-
-    case "9", "10":
-      voteFinal = 5;
-      break;
-
-  }
+  var voteInteger = number / 2;
+  var voteFinal = voteInteger.toFixed();
 
   return voteFinal;
 }
@@ -190,5 +179,5 @@ function getStars(number) {
     arrayStars.push(emptyStar);
   }
 
-  return arrayStars;
+  return arrayStars.join('');
 }
