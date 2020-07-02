@@ -78,13 +78,15 @@ function printMovies(array) {
     var vote = array[i].vote_average;
     var voteFinal = getVoteOneToFive(vote);
 
+    var stars = getStars(voteFinal);
+
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
     var context = {
       title: array[i].title,
       original_title: array[i].original_title,
       language: array[i].original_language,
-      vote: voteFinal,
+      vote: stars,
     };
     var html = template(context);
 
@@ -140,5 +142,17 @@ function getVoteOneToFive(number) {
 }
 
 function getStars(number) {
-  
+  var arrayStars = [];
+  for (var i = 0; i < number; i++) {
+    var fullStar = '<i class="fas fa-star"></i>';
+
+    arrayStars.push(fullStar);
+  }
+
+  while (arrayStars.length < 5) {
+    var emptyStar = '<i class="far fa-star"></i>';
+    arrayStars.push(emptyStar);
+  }
+
+  return arrayStars;
 }
