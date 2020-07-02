@@ -47,6 +47,10 @@ function searchMovies(valueQuery) {
       },
       success: function(dataResponse) {
         var arrayMovies = dataResponse.results;
+        if(arrayMovies.length === 0) {
+          var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
+          printErrorMessage(zeroRisultsMessagge);
+        }
 
         printMoviesAndSeries(arrayMovies, url);
       },
@@ -82,6 +86,11 @@ function searchSeries(valueQuery) {
       },
       success: function(dataResponse) {
         var arraySeries = dataResponse.results;
+        
+        if(arrayMovies.length === 0) {
+          var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
+          printErrorMessage(zeroRisultsMessagge);
+        }
 
         printMoviesAndSeries(arraySeries, url);
       },
@@ -123,7 +132,7 @@ function printMoviesAndSeries(array, url) {
       var context = {
         title: array[i].name,
         original_title: array[i].original_name,
-        language: '<img src="img/' + array[i].original_language + '.png">',
+        language: '<img src="img/' + array[i].original_language + '.png" alt="Flag">',
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };
@@ -131,7 +140,7 @@ function printMoviesAndSeries(array, url) {
       var context = {
         title: array[i].title,
         original_title: array[i].original_title,
-        language: '<img src="img/' + array[i].original_language + '.png">',
+        language: '<img src="img/' + array[i].original_language + '.png" alt="Flag">',
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };

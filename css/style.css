@@ -47,3 +47,14 @@ button {
   width: calc(100% / 4);
   margin-top: 10px;
 }
+
+.movie-info .poster-case {
+  height: 231px;
+  width: 154px;
+  background-color: white;
+  margin: 0 auto;
+}
+
+/* .poster-case img {
+  height: 100%;
+} */
