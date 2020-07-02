@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.js"></script>
     <script src="https://momentjs.com/downloads/moment.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -17,6 +18,8 @@
           <input type="text" placeholder="Inserisci il nome di un film">
           <button id="search" type="button" name="button">Search</button>
         </div>
+
+        <div class="error"></div>
 
         <div class="movie-container"></div>
       </div>
@@ -30,6 +33,10 @@
         <span>Lingua Originale: {{language}}</span><br>
         <span>Voto: {{vote}}</span>
       </div>
+    </script>
+
+    <script id="error-message-template" type="text/x-handlebars-template">
+      <p>{{message}}</p>
     </script>
 
     <script type="text/javascript" src="js/script.js"></script>

@@ -26,14 +26,17 @@ $(document).ready(function() {
 // Argomento:
 //     --> valore di ricerca(una stringa), che andrà inserito nell'API
 function searchMovies(valueQuery) {
-  // Al click, faccio la chiamata ajax all'API,
+  // Faccio la chiamata ajax all'API,
   // e inserisco il valore dell'input come query di ricerca
+  var url = 'https://api.themviedb.org/3/search/movie';
+  var api_key = '9e3b41d15d625e280b597413a544c557';
+
   $.ajax(
     {
-      url: 'https://api.themoviedb.org/3/search/movie',
+      url: url,
       method: 'GET',
       data: {
-        api_key: '9e3b41d15d625e280b597413a544c557',
+        api_key: api_key,
         query: valueQuery,
         language: 'it-IT'
       },
@@ -43,8 +46,15 @@ function searchMovies(valueQuery) {
         printMovies(arrayMovies);
       },
       error: function(richiesta, stato, errori) {
-        alert('ERROR');
-        // console.log(errori);
+        var errorMessage;
+        
+        if(richiesta.status === 422) {
+          errorMessage = 'Inserisci una chiave di ricerca.';
+          printErrorMessage(errorMessage);
+        } else {
+          errorMessage = 'Ops, qualcosa è andato storto: error ' + richiesta.status;
+          printErrorMessage(errorMessage);
+        }
       }
     }
   );
@@ -79,4 +89,17 @@ function printMovies(array) {
 
   // Alla fine resetto il paceholder dell'input
   $('input').val(''); //------------ TODO: rendere dinamico?
+}
+
+function printErrorMessage(message) {
+  $('.error').html(''); //------------ TODO: rendere dinamico?
+
+  var source = $('#error-message-template').html();
+  var template = Handlebars.compile(source);
+
+  var context = {
+    message: message
+  };
+  var html = template(context);
+  $('.error').append(html);
 }
