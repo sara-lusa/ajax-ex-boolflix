@@ -9,7 +9,7 @@ $(document).ready(function() {
 
     // Resetto inizialmente il contenitore delle schede film che
     // andrò a popolare
-    $('.movie-container').html('');
+    reset('.movie-container');
     searchMovies(valueQuery);
     searchSeries(valueQuery);
   });
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
       // Resetto inizialmente il contenitore delle schede film che
       // andrò a popolare
-      $('.movie-container').html('');
+      reset('.movie-container');
       searchMovies(valueQuery);
       searchSeries(valueQuery);
     }
@@ -29,6 +29,10 @@ $(document).ready(function() {
 });
 
 // FUNCTIONS
+// Funzione che resetta
+function reset(selettore) {
+  $(selettore).html('');
+}
 /// Funzione di chiamata ajax per ricerca
 // e stampa di una lista di film tramite ulteriore funzione
 // Argomento:
@@ -176,7 +180,7 @@ function printMoviesAndSeries(array, url) {
 // Argomento:
 //     --> stringa
 function printErrorMessage(message) {
-  $('.error').html(''); //------------ TODO: rendere dinamico?
+  reset('.error');
 
   var source = $('#error-message-template').html();
   var template = Handlebars.compile(source);
@@ -250,7 +254,6 @@ function getFlagLang(language) {
 //     --> stringa, che indica il codice dei poster
 // return: posterHtml, che indica la source delle immagini da inserire
 function getThePoster(poster) {
-  console.log(poster);
   if(poster === null) {
     var posterHtml = 'img/no-poster.jpg';
   } else {
