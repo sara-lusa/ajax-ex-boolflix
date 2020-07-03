@@ -261,7 +261,7 @@ function getThePoster(poster) {
   if(poster === null) {
     var posterHtml = 'img/no-poster.jpg';
   } else {
-    var posterHtml = 'https://image.tmdb.org/t/p/w154'+ poster;
+    var posterHtml = 'https://image.tmdb.org/t/p/w342'+ poster;
   }
 
   return posterHtml;
