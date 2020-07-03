@@ -7,6 +7,9 @@ $(document).ready(function() {
     // Dichiaro in una variabile il valore dell'input
     var valueQuery = $('input').val();
 
+    // Resetto inizialmente il contenitore delle schede film che
+    // andrò a popolare
+    $('.movie-container').html('');
     searchMovies(valueQuery);
     searchSeries(valueQuery);
   });
@@ -16,6 +19,9 @@ $(document).ready(function() {
       // Dichiaro in una variabile il valore dell'input
       var valueQuery = $('input').val();
 
+      // Resetto inizialmente il contenitore delle schede film che
+      // andrò a popolare
+      $('.movie-container').html('');
       searchMovies(valueQuery);
       searchSeries(valueQuery);
     }
@@ -117,9 +123,6 @@ function searchSeries(valueQuery) {
 // Argomento:
 //     --> array di oggetti
 function printMoviesAndSeries(array, url) {
-  // Resetto inizialmente il contenitore delle schede film che
-  // andrò a popolare
-  $('.movie-container').html('');
 
   // Con handlebars copio il template della scheda film
   var source = $('#movie-template').html();
@@ -133,12 +136,7 @@ function printMoviesAndSeries(array, url) {
 
     var stars = getStars(voteFinal);
 
-    var language;
-    if(array[i].original_language === 'en') {
-      language = '<img src="img/en.png" alt="Flag"> <img src="img/us.png" alt="Flag">'
-    } else {
-      language ='<img src="img/' + array[i].original_language + '.png" alt="Flag">';
-    }
+    var languageFlag = getFlagLang(array[i].original_language);
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
@@ -147,7 +145,7 @@ function printMoviesAndSeries(array, url) {
       var context = {
         title: array[i].name,
         original_title: array[i].original_name,
-        language: language,
+        language: languageFlag,
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };
@@ -157,7 +155,7 @@ function printMoviesAndSeries(array, url) {
       var context = {
         title: array[i].title,
         original_title: array[i].original_title,
-        language: language,
+        language: languageFlag,
         vote: stars,
         poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
       };
@@ -221,4 +219,26 @@ function getStars(number) {
   }
 
   return arrayStars.join('');
+}
+
+// Funziona che ha un array di sigle che rappresentano
+// le lingue, e poi controlla se il codice passato con l'argomento,
+// è uguale a una delle sigle nell'array
+// Argomento:
+//     --> stringa, che indica il codice della lingua
+// return: languageFlag, che corrisponde a una stringa di html da appendere
+function getFlagLang(language) {
+  var arrayFlags = ['it', 'en', 'de', 'fr', 'es', 'us'];
+
+  if(arrayFlags.includes(language)) {
+    var languageFlag = '<img src="img/' + language +'.png" alt="Flag">';
+  }
+  // else if(arrayFlags.includes('en')) {
+  //   var languageFlag = '<img src="img/en.png" alt="Flag"> <img src="img/us.png" alt="Flag">';
+  // }
+  else {
+    var languageFlag = language;
+  }
+
+  return languageFlag;
 }
