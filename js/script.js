@@ -167,6 +167,7 @@ function printMoviesAndSeries(array, url) {
       language: languageFlag,
       vote: stars,
       poster: poster,
+      overview: array[i].overview,
     };
 
     var html = template(context);

@@ -43,16 +43,17 @@
 
     <!-- Template scheda film -->
     <script id="movie-template" type="text/x-handlebars-template">
-      <div class="movie-info">
+      <div class="movie-card">
         <div class="poster-case">
           <img class="poster" src="{{poster}}" alt="Poster non disponibile">
 
-          <!-- <div class="">
-            <h2>Titolo: {{title}}</h2>
-            <h4>Titolo Originale: {{original_title}}</h4>
-            <span>Lingua Originale: {{{language}}}</span><br>
-            <span>Voto: {{{vote}}}</span>
-          </div> -->
+          <div class="movie-info">
+            <p><span>Titolo:</span> {{title}}</p>
+            <p><span>Titolo Originale:</span> {{original_title}}</p>
+            <p><span>Lingua Originale:</span> {{{language}}}</p>
+            <p><span>Voto:</span> {{{vote}}}</p>
+            <p><span>Overview:</span> {{overview}}</p>
+          </div>
         </div>
       </div>
     </script>
