@@ -79,7 +79,17 @@ input {
   width: 100%;
 }
 
+.movie-card .poster-case:hover .movie-info {
+  display: block;
+  cursor: pointer;
+}
+
+.movie-card .poster-case .movie-info img {
+  vertical-align: middle;
+}
+
 .movie-info {
+  display: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -87,11 +97,23 @@ input {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
+  text-align: left;
+  padding: 15px 10px;
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
 }
 
 .movie-info span {
   font-weight: bold;
-  
+}
+
+.movie-info p {
+  margin-bottom: 9px;
+  font-size: 18px;
+}
+
+.movie-info p i {
+  color: #ffbe00;
 }
 
 /* .poster-case img {
