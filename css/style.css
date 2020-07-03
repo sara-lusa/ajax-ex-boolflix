@@ -55,6 +55,13 @@ input {
   padding: 20px 0;
 }
 
+.error {
+  color: white;
+  font-size: 23px;
+  font-weight: bold;
+  margin-top: 25px;
+}
+
 .movie-container {
   width: 100%;
   margin-top: 20px;
