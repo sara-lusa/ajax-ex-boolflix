@@ -138,28 +138,29 @@ function printMoviesAndSeries(array, url) {
 
     var languageFlag = getFlagLang(array[i].original_language);
 
+    var poster = getThePoster(array[i].poster_path);
+
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
     // Qui completo per le serie tv
     if(url.includes('tv') ) {
-      var context = {
-        title: array[i].name,
-        original_title: array[i].original_name,
-        language: languageFlag,
-        vote: stars,
-        poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
-      };
+      var title = array[i].name;
+      var originalTitle = array[i].original_name;
     }
     // Qui completo per i film
     else {
-      var context = {
-        title: array[i].title,
-        original_title: array[i].original_title,
-        language: languageFlag,
-        vote: stars,
-        poster: 'https://image.tmdb.org/t/p/w154'+ array[i].poster_path,
-      };
+      var title = array[i].title;
+      var originalTitle = array[i].original_title;
     }
+
+    var context = {
+      title: title,
+      original_title: originalTitle,
+      language: languageFlag,
+      vote: stars,
+      poster: poster,
+    };
+
     var html = template(context);
 
     // Appendo poi il template al container
@@ -170,7 +171,7 @@ function printMoviesAndSeries(array, url) {
   $('input').val(''); //------------ TODO: rendere dinamico?
 }
 
-// Funziona che stampa a schermo, utilizzando
+// Funzione che stampa a schermo, utilizzando
 // handlebars, un messaggio di errore passatogli come Argomento
 // Argomento:
 //     --> stringa
@@ -187,7 +188,7 @@ function printErrorMessage(message) {
   $('.error').append(html);
 }
 
-// Funziona che trasforma numeri decimali da 1 a 10
+// Funzione che trasforma numeri decimali da 1 a 10
 // in un numeri interi da 1 a 5
 // Argomento:
 //     --> numero
@@ -199,7 +200,7 @@ function getVoteOneToFive(number) {
   return voteFinal;
 }
 
-// Funziona che crea un array e lo riempie di un
+// Funzione che crea un array e lo riempie di un
 // numero preciso(number) di stelle piene, e poi
 // Ne aggiunge altre vuote, fino ad arrivare a 5 stelle totali(icone)
 // Argomento:
@@ -221,7 +222,7 @@ function getStars(number) {
   return arrayStars.join('');
 }
 
-// Funziona che ha un array di sigle che rappresentano
+// Funzione che ha un array di sigle che rappresentano
 // le lingue, e poi controlla se il codice passato con l'argomento,
 // è uguale a una delle sigle nell'array
 // Argomento:
@@ -241,4 +242,20 @@ function getFlagLang(language) {
   }
 
   return languageFlag;
+}
+
+// Funzione che torna la source da inserire nel tag img.
+// Se il codice inserito è nullo, allora inserisco una immagine fissa
+// Argomento:
+//     --> stringa, che indica il codice dei poster
+// return: posterHtml, che indica la source delle immagini da inserire
+function getThePoster(poster) {
+  console.log(poster);
+  if(poster === null) {
+    var posterHtml = 'img/no-poster.jpg';
+  } else {
+    var posterHtml = 'https://image.tmdb.org/t/p/w154'+ poster;
+  }
+
+  return posterHtml;
 }
