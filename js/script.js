@@ -59,7 +59,7 @@ function searchMovies(valueQuery) {
       success: function(dataResponse) {
         var arrayMovies = dataResponse.results;
         if(arrayMovies.length === 0) {
-          var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
+          var zeroRisultsMessagge = 'La ricerca di Film non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
         } else {
           printMoviesAndSeries(arrayMovies, url);
@@ -104,7 +104,7 @@ function searchSeries(valueQuery) {
         var arraySeries = dataResponse.results;
 
         if(arraySeries.length === 0) {
-          var zeroRisultsMessagge = 'La ricerca non ha prodotto risultati.';
+          var zeroRisultsMessagge = 'La ricerca di Serie Tv non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
         } else {
           printMoviesAndSeries(arraySeries, url);
