@@ -3,18 +3,18 @@ $(document).ready(function() {
   // https://api.themoviedb.org/3/movie/550?api_key=9e3b41d15d625e280b597413a544c557
 
   // // Creo evento al click del button
-  $('#search').click(function() {
-    // Dichiaro in una variabile il valore dell'input
-    var valueQuery = $('input').val();
-
-    // Resetto inizialmente il contenitore delle schede film che
-    // andrò a popolare
-    reset('.movie-container');
-    reset('.error');
-
-    searchMovies(valueQuery);
-    searchSeries(valueQuery);
-  });
+  // $('#search').click(function() {
+  //   // Dichiaro in una variabile il valore dell'input
+  //   var valueQuery = $('input').val();
+  //
+  //   // Resetto inizialmente il contenitore delle schede film che
+  //   // andrò a popolare
+  //   reset('.movie-container');
+  //   reset('.error');
+  //
+  //   searchMovies(valueQuery);
+  //   searchSeries(valueQuery);
+  // });
 
   $('input').keypress(function(event) {
     if(event.which === 13 || event.keyCode === 13) {
@@ -25,7 +25,7 @@ $(document).ready(function() {
       // andrò a popolare
       reset('.movie-container');
       reset('.error');
-      
+
       searchMovies(valueQuery);
       searchSeries(valueQuery);
     }
