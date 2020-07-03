@@ -10,6 +10,8 @@ $(document).ready(function() {
     // Resetto inizialmente il contenitore delle schede film che
     // andrò a popolare
     reset('.movie-container');
+    reset('.error');
+
     searchMovies(valueQuery);
     searchSeries(valueQuery);
   });
@@ -22,6 +24,8 @@ $(document).ready(function() {
       // Resetto inizialmente il contenitore delle schede film che
       // andrò a popolare
       reset('.movie-container');
+      reset('.error');
+      
       searchMovies(valueQuery);
       searchSeries(valueQuery);
     }
