@@ -53,6 +53,12 @@
             <p><span>Lingua Originale:</span> {{{language}}}</p>
             <p><span>Voto:</span> {{{vote}}}</p>
             <p class="overview"><span>Overview:</span> {{overview}}</p>
+            <p><span>Genre:</span> {{genre}}</p>
+            <ul>
+              {{#each cast_member}}
+              <li>{{this}}</li>
+              {{/each}}
+            </ul>
           </div>
         </div>
       </div>

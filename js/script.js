@@ -63,6 +63,7 @@ function searchMovies(valueQuery) {
           printErrorMessage(zeroRisultsMessagge);
         } else {
           printMoviesAndSeries(arrayMovies, url);
+
         }
 
       },
@@ -178,6 +179,38 @@ function printMoviesAndSeries(array, url) {
 
   // Alla fine resetto il paceholder dell'input
   $('input').val(''); //------------ TODO: rendere dinamico?
+}
+
+// Funzione che cerca e aggiunge i generi e gli attori dei film/serie stampati
+//
+function getGenre(url, array) {
+  // Prendo array.id (array.results.id)
+
+  // faccio una chiamata ajax
+  // if (url.includes('tv')) {
+  // cerco /serie/array.id
+  // var genre =
+  // } else {
+  // cerco /movie/array.id
+  // var genre =
+  // }
+
+  return genre;
+};
+
+function getCredits(url) {
+  // Prendo array.id (array.results.id)
+
+  // faccio una chiamata ajax
+  // if (url.includes('tv')) {
+  // cerco /serie/array.id/credits
+  // var cast = array
+  // } else {
+  // cerco /movie/array.id/credits
+  // var cast = array
+  // }
+
+  return cast;
 }
 
 // Funzione che stampa a schermo, utilizzando

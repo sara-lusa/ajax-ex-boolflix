@@ -84,6 +84,7 @@ input {
 .movie-card .poster-case img.poster {
   height: 100%;
   width: 100%;
+  border-radius: 10px;
 }
 
 .movie-card .poster-case:hover .movie-info {
@@ -107,6 +108,7 @@ input {
   text-align: left;
   padding: 15px 10px;
   overflow-y: auto;
+  border-radius: 10px;
 }
 
 .movie-info span {
