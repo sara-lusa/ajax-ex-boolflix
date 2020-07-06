@@ -64,6 +64,7 @@ function searchMovies(valueQuery) {
           printErrorMessage(zeroRisultsMessagge);
         } else {
           printMoviesAndSeries(arrayMovies, url);
+          // console.log(getGenre(arrayMovies, url, api_key));
           getGenre(arrayMovies, url, api_key);
         }
 
@@ -110,6 +111,7 @@ function searchSeries(valueQuery) {
           printErrorMessage(zeroRisultsMessagge);
         } else {
           printMoviesAndSeries(arraySeries, url);
+          // console.log(getGenre(arraySeries, url, api_key));
           getGenre(arraySeries, url, api_key);
         }
 
@@ -148,8 +150,8 @@ function printMoviesAndSeries(array, url) {
     var stars = getStars(voteFinal);
     var languageFlag = getFlagLang(array[i].original_language);
     var poster = getThePoster(array[i].poster_path);
-    // var genre = getGenre(url, array[i].id);
-    // var cast = getCredits(url, array[i].id)
+    // var genre;
+    // var cast;
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
@@ -171,6 +173,7 @@ function printMoviesAndSeries(array, url) {
       vote: stars,
       poster: poster,
       overview: array[i].overview,
+      id: array[i].id,
       // genre: genre,
       // cast_member: cast
     };
@@ -209,6 +212,7 @@ function getGenre(array, url, api_key) {
             var genre = response.genres;
 
             getCredits(urlGenre, genre, api_key);
+            return genre;
           },
           error: function() {
             // ALERT di errore
@@ -229,7 +233,7 @@ function getGenre(array, url, api_key) {
             api_key: api_key,
           },
           success: function(response) {
-            var genre = response.genres;
+            var genre = response;
 
             getCredits(urlGenre, genre, api_key);
           },
@@ -252,7 +256,7 @@ function getCredits(url, arrayGenre, api_key) {
         api_key: api_key,
       },
       success: function(response) {
-        var cast = response.cast;
+        var cast = response;
 
         printGenreAndCredits(arrayGenre, cast);
       },
@@ -268,46 +272,57 @@ function printGenreAndCredits(arrayGenre, arrayCast) {
   var source = $('#genre-cast-template').html();
   var template = Handlebars.compile(source);
 
+  var arrayCastFinale = [];
+  var arrayGenreFinale = [];
+
   for (var i = 0; i < 5; i++) {
 
-    console.log(arrayGenre[i].name);
-    console.log(arrayCast[i].name);
+    var arrayGenreFocus = arrayGenre.genres;
+    var arrayCastFocus = arrayCast.cast;
 
-    if(arrayGenre[i] == undefined) {
-      var context = {
-        cast: arrayCast[i].name,
-      }
+    if(arrayGenreFocus[i] == undefined && arrayCastFocus[i] != undefined) {
+      arrayCastFinale.push(arrayCastFocus[i].name);
+      // var context = {
+      //   cast: arrayCastFocus[i].name,
+      // }
+      console.log(arrayCastFocus[i].name);
 
-      var html = template(context);
-
-      // Appendo poi il template al container
-      $('.movie-info').append(html);
+      // var html = template(context);
     }
     //
-    else if(arrayCast[i] == undefined) {
-      var context = {
-        genre: arrayGenre[i].name,
-      }
+    else if(arrayCastFocus[i] == undefined && arrayGenreFocus[i] != undefined) {
+      arrayGenreFinale.push(arrayGenreFocus[i].name);
+      // var context = {
+      //   genre: arrayGenreFocus[i].name,
+      // }
+      console.log(arrayGenreFocus[i].name);
 
-      var html = template(context);
-
-      // Appendo poi il template al container
-      $('.movie-info').append(html);
+      // var html = template(context);
     }
     //
-    else {
-      var context = {
-        genre: arrayGenre[i].name,
-        cast: arrayCast[i].name,
-      }
-
-      var html = template(context);
-
-      // Appendo poi il template al container
-      $('.movie-info').append(html);
+    else if(arrayCastFocus[i] != undefined && arrayGenreFocus[i] != undefined) {
+      arrayCastFinale.push(arrayCastFocus[i].name);
+      arrayGenreFinale.push(arrayGenreFocus[i].name);
+      // var context = {
+      //   genre: arrayGenreFocus[i].name,
+      //   cast: arrayCastFocus[i].name,
+      // }
+      console.log(arrayGenreFocus[i].name);
+      console.log(arrayCastFocus[i].name);
     }
   }
+  var context = {
+    genre: arrayGenreFinale,
+    cast: arrayCastFinale,
+  }
+
+  var html = template(context);
+  // Appendo poi il template al container
+  $('.movie-info[data-id="' + arrayCast.id + '"]').append(html);
+  // console.log(arrayCast[i].id);
 }
+
+
 // Funzione che stampa a schermo, utilizzando
 // handlebars, un messaggio di errore passatogli come Argomento
 // Argomento:

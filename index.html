@@ -47,12 +47,13 @@
         <div class="poster-case">
           <img class="poster" src="{{poster}}" alt="Poster non disponibile">
 
-          <div class="movie-info">
+          <div data-id="{{id}}" class="movie-info">
             <p><span>Titolo:</span> {{title}}</p>
             <p><span>Titolo Originale:</span> {{original_title}}</p>
             <p><span>Lingua Originale:</span> {{{language}}}</p>
             <p><span>Voto:</span> {{{vote}}}</p>
             <p class="overview"><span>Overview:</span> {{overview}}</p>
+
           </div>
         </div>
       </div>
@@ -60,17 +61,7 @@
 
     <script id="genre-cast-template" type="text/x-handlebars-template">
       <p><span>Genre:</span> {{genre}}</p>
-      <!-- <ul>
-        {{#each genre}}
-          <li>{{this}}</li>
-        {{/each}}
-      </ul> -->
       <p><span>Cast:</span> {{cast}}</p>
-      <!-- <ul>
-        {{#each cast_member}}
-        <li>{{this}}</li>
-        {{/each}}
-      </ul> -->
     </script>
 
     <!-- Template avviso di errore -->
