@@ -37,6 +37,7 @@ $(document).ready(function() {
 function reset(selettore) {
   $(selettore).html('');
 }
+
 /// Funzione di chiamata ajax per ricerca
 // e stampa di una lista di film tramite ulteriore funzione
 // Argomento:
@@ -62,8 +63,8 @@ function searchMovies(valueQuery) {
           var zeroRisultsMessagge = 'La ricerca di Film non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
         } else {
-          var genre = getGenre(arrayMovies, url, api_key);
-          printMoviesAndSeries(arrayMovies, url, genre);
+          printMoviesAndSeries(arrayMovies, url);
+          getGenre(arrayMovies, url, api_key);
         }
 
       },
@@ -108,8 +109,8 @@ function searchSeries(valueQuery) {
           var zeroRisultsMessagge = 'La ricerca di Serie Tv non ha prodotto risultati.';
           printErrorMessage(zeroRisultsMessagge);
         } else {
-          var genre = getGenre(arraySeries, url, api_key);
-          printMoviesAndSeries(arraySeries, url, genre);
+          printMoviesAndSeries(arraySeries, url);
+          getGenre(arraySeries, url, api_key);
         }
 
       },
@@ -132,9 +133,8 @@ function searchSeries(valueQuery) {
 // singoli parti di oggetti di un array
 // Argomento:
 //     --> array di oggetti
-function printMoviesAndSeries(array, url, genre) {
+function printMoviesAndSeries(array, url) {
 
-  console.log(genre);
   // Con handlebars copio il template della scheda film
   var source = $('#movie-template').html();
   var template = Handlebars.compile(source);
@@ -171,7 +171,7 @@ function printMoviesAndSeries(array, url, genre) {
       vote: stars,
       poster: poster,
       overview: array[i].overview,
-      genre: genre,
+      // genre: genre,
       // cast_member: cast
     };
 
@@ -196,16 +196,19 @@ function getGenre(array, url, api_key) {
     if(url.includes('tv')) {
       // chiamata ajax in serie
       // con valore query e id nell'url
+      var urlGenre = 'https://api.themoviedb.org/3/tv/' + id;
+
       $.ajax(
         {
-          url: 'https://api.themoviedb.org/3/tv/' + id,
+          url: urlGenre,
           method: 'GET',
           data: {
             api_key: api_key,
           },
           success: function(response) {
             var genre = response.genres;
-            return genre;
+
+            getCredits(urlGenre, genre, api_key);
           },
           error: function() {
             // ALERT di errore
@@ -216,16 +219,19 @@ function getGenre(array, url, api_key) {
     else {
       // chiamata ajax in movie
       // con valore query e id nell'url
+      var urlGenre = 'https://api.themoviedb.org/3/movie/' + id;
+
       $.ajax(
         {
-          url: 'https://api.themoviedb.org/3/movie/' + id,
+          url: urlGenre,
           method: 'GET',
           data: {
             api_key: api_key,
           },
           success: function(response) {
             var genre = response.genres;
-            return genre;
+
+            getCredits(urlGenre, genre, api_key);
           },
           error: function() {
             // ALERT di errore
@@ -233,24 +239,75 @@ function getGenre(array, url, api_key) {
         }
       );
     }
-
-    // return genre;
   }
 };
 
-function getCredits(array, url, query) {
+function getCredits(url, arrayGenre, api_key) {
   // Faccio una chiamata ajax
-  // if (url.includes('tv')) {
-  // cerco /serie/array.id/credits
-  // var cast = array
-  // } else {
-  // cerco /movie/array.id/credits
-  // var cast = array
-  // }
+  $.ajax(
+    {
+      url: url + '/credits',
+      method: 'GET',
+      data: {
+        api_key: api_key,
+      },
+      success: function(response) {
+        var cast = response.cast;
 
-  return cast;
+        printGenreAndCredits(arrayGenre, cast);
+      },
+      error: function() {
+
+      }
+    }
+  );
 }
 
+function printGenreAndCredits(arrayGenre, arrayCast) {
+  // Con handlebars copio il template della scheda film
+  var source = $('#genre-cast-template').html();
+  var template = Handlebars.compile(source);
+
+  for (var i = 0; i < 5; i++) {
+
+    console.log(arrayGenre[i].name);
+    console.log(arrayCast[i].name);
+
+    if(arrayGenre[i] == undefined) {
+      var context = {
+        cast: arrayCast[i].name,
+      }
+
+      var html = template(context);
+
+      // Appendo poi il template al container
+      $('.movie-info').append(html);
+    }
+    //
+    else if(arrayCast[i] == undefined) {
+      var context = {
+        genre: arrayGenre[i].name,
+      }
+
+      var html = template(context);
+
+      // Appendo poi il template al container
+      $('.movie-info').append(html);
+    }
+    //
+    else {
+      var context = {
+        genre: arrayGenre[i].name,
+        cast: arrayCast[i].name,
+      }
+
+      var html = template(context);
+
+      // Appendo poi il template al container
+      $('.movie-info').append(html);
+    }
+  }
+}
 // Funzione che stampa a schermo, utilizzando
 // handlebars, un messaggio di errore passatogli come Argomento
 // Argomento:
@@ -266,7 +323,7 @@ function printErrorMessage(message) {
   };
   var html = template(context);
   $('.error').append(html);
-}
+};
 
 // Funzione che trasforma numeri decimali da 1 a 10
 // in un numeri interi da 1 a 5
@@ -278,7 +335,7 @@ function getVoteOneToFive(number) {
   var voteFinal = voteInteger.toFixed();
 
   return voteFinal;
-}
+};
 
 // Funzione che crea un array e lo riempie di un
 // numero preciso(number) di stelle piene, e poi
@@ -300,7 +357,7 @@ function getStars(number) {
   }
 
   return arrayStars.join('');
-}
+};
 
 // Funzione che ha un array di sigle che rappresentano
 // le lingue, e poi controlla se il codice passato con l'argomento,
@@ -322,7 +379,7 @@ function getFlagLang(language) {
   }
 
   return languageFlag;
-}
+};
 
 // Funzione che torna la source da inserire nel tag img.
 // Se il codice inserito è nullo, allora inserisco una immagine fissa
@@ -337,4 +394,4 @@ function getThePoster(poster) {
   }
 
   return posterHtml;
-}
+};

@@ -53,21 +53,24 @@
             <p><span>Lingua Originale:</span> {{{language}}}</p>
             <p><span>Voto:</span> {{{vote}}}</p>
             <p class="overview"><span>Overview:</span> {{overview}}</p>
-            <span>Genre:</span>
-            <ul>
-              {{#each genre}}
-                <li>{{this}}</li>
-              {{/each}}
-            </ul>
-            <span>Cast:</span>
-            <ul>
-              {{#each cast_member}}
-              <li>{{this}}</li>
-              {{/each}}
-            </ul>
           </div>
         </div>
       </div>
+    </script>
+
+    <script id="genre-cast-template" type="text/x-handlebars-template">
+      <p><span>Genre:</span> {{genre}}</p>
+      <!-- <ul>
+        {{#each genre}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul> -->
+      <p><span>Cast:</span> {{cast}}</p>
+      <!-- <ul>
+        {{#each cast_member}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul> -->
     </script>
 
     <!-- Template avviso di errore -->
