@@ -63,7 +63,7 @@ function searchMovies(valueQuery) {
           printErrorMessage(zeroRisultsMessagge);
         } else {
           printMoviesAndSeries(arrayMovies, url);
-
+          getGenre(arrayMovies, url, valueQuery);
         }
 
       },
@@ -131,7 +131,7 @@ function searchSeries(valueQuery) {
 // singoli parti di oggetti di un array
 // Argomento:
 //     --> array di oggetti
-function printMoviesAndSeries(array, url) {
+function printMoviesAndSeries(array, url, genre, cast) {
 
   // Con handlebars copio il template della scheda film
   var source = $('#movie-template').html();
@@ -144,10 +144,10 @@ function printMoviesAndSeries(array, url) {
     var voteFinal = getVoteOneToFive(vote);
 
     var stars = getStars(voteFinal);
-
     var languageFlag = getFlagLang(array[i].original_language);
-
     var poster = getThePoster(array[i].poster_path);
+    // var genre = getGenre(url, array[i].id);
+    // var cast = getCredits(url, array[i].id)
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
@@ -169,6 +169,8 @@ function printMoviesAndSeries(array, url) {
       vote: stars,
       poster: poster,
       overview: array[i].overview,
+      genre: genre,
+      cast_member: cast
     };
 
     var html = template(context);
@@ -183,25 +185,34 @@ function printMoviesAndSeries(array, url) {
 
 // Funzione che cerca e aggiunge i generi e gli attori dei film/serie stampati
 //
-function getGenre(url, array) {
-  // Prendo array.id (array.results.id)
+function getGenre(array, url, query) {
+  // Cerco l'id nell'array
 
-  // faccio una chiamata ajax
+  // Faccio una chiamata ajax
   // if (url.includes('tv')) {
   // cerco /serie/array.id
   // var genre =
-  // } else {
+  // }
+  if(url.includes('tv')) {
+    // chiamata ajax in serie
+    // con valore query e id nell'url
+    // Genre
+  }
+  // else {
   // cerco /movie/array.id
   // var genre =
   // }
+  else {
+    // chiamata ajax in movie
+    // con valore query e id nell'url
+    // Genre
+  }
 
   return genre;
 };
 
-function getCredits(url) {
-  // Prendo array.id (array.results.id)
-
-  // faccio una chiamata ajax
+function getCredits(array, url, query) {
+  // Faccio una chiamata ajax
   // if (url.includes('tv')) {
   // cerco /serie/array.id/credits
   // var cast = array
