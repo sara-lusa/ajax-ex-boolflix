@@ -26,8 +26,8 @@ $(document).ready(function() {
       reset('.movie-container');
       reset('.error');
 
-      searchMovies(valueQuery);
-      searchSeries(valueQuery);
+      searchMoviesAndSeries(valueQuery, 'movie');
+      searchMoviesAndSeries(valueQuery, 'tv');
     }
   });
 });
@@ -39,13 +39,13 @@ function reset(selettore) {
 }
 
 /// Funzione di chiamata ajax per ricerca
-// e stampa di una lista di film tramite ulteriore funzione
+// e stampa di una lista di film e serie tv tramite ulteriore funzione
 // Argomento:
 //     --> valore di ricerca(una stringa), che andrà inserito nell'API
-function searchMovies(valueQuery) {
+function searchMoviesAndSeries(valueQuery, type) {
   // Faccio la chiamata ajax all'API,
   // e inserisco il valore dell'input come query di ricerca
-  var url = 'https://api.themoviedb.org/3/search/movie';
+  var url = 'https://api.themoviedb.org/3/search/' + type;
   var api_key = '9e3b41d15d625e280b597413a544c557';
 
   $.ajax(
@@ -60,59 +60,17 @@ function searchMovies(valueQuery) {
       success: function(dataResponse) {
         var arrayMovies = dataResponse.results;
         if(arrayMovies.length === 0) {
-          var zeroRisultsMessagge = 'La ricerca di Film non ha prodotto risultati.';
-          printErrorMessage(zeroRisultsMessagge);
+
+          if(type == 'movie') {
+            var zeroRisultsMessagge = 'La ricerca di Film non ha prodotto risultati.';
+            printErrorMessage(zeroRisultsMessagge);
+          } else {
+            var zeroRisultsMessagge = 'La ricerca di Serie Tv non ha prodotto risultati.';
+            printErrorMessage(zeroRisultsMessagge);
+          }
+
         } else {
-          printMoviesAndSeries(arrayMovies, url);
-          // console.log(getGenre(arrayMovies, url, api_key));
-          getGenre(arrayMovies, url, api_key);
-        }
-
-      },
-      error: function(richiesta, stato, errori) {
-        var errorMessage;
-
-        if(richiesta.status === 422) {
-          errorMessage = 'Inserisci una chiave di ricerca.';
-          printErrorMessage(errorMessage);
-        } else {
-          errorMessage = 'Ops, qualcosa è andato storto: error ' + richiesta.status;
-          printErrorMessage(errorMessage);
-        }
-      }
-    }
-  );
-}
-
-// Funzione di chiamata ajax per ricerca
-// e stampa di una lista di serie tv tramite ulteriore funzione
-// Argomento:
-//     --> valore di ricerca(una stringa), che andrà inserito nell'API
-function searchSeries(valueQuery) {
-  // Faccio la chiamata ajax all'API,
-  // e inserisco il valore dell'input come query di ricerca
-  var url = 'https://api.themoviedb.org/3/search/tv';
-  var api_key = '9e3b41d15d625e280b597413a544c557';
-
-  $.ajax(
-    {
-      url: url,
-      method: 'GET',
-      data: {
-        api_key: api_key,
-        query: valueQuery,
-        language: 'it-IT'
-      },
-      success: function(dataResponse) {
-        var arraySeries = dataResponse.results;
-
-        if(arraySeries.length === 0) {
-          var zeroRisultsMessagge = 'La ricerca di Serie Tv non ha prodotto risultati.';
-          printErrorMessage(zeroRisultsMessagge);
-        } else {
-          printMoviesAndSeries(arraySeries, url);
-          // console.log(getGenre(arraySeries, url, api_key));
-          getGenre(arraySeries, url, api_key);
+          printMoviesAndSeries(arrayMovies, type, api_key);
         }
 
       },
@@ -135,7 +93,7 @@ function searchSeries(valueQuery) {
 // singoli parti di oggetti di un array
 // Argomento:
 //     --> array di oggetti
-function printMoviesAndSeries(array, url) {
+function printMoviesAndSeries(array, type, api_key) {
 
   // Con handlebars copio il template della scheda film
   var source = $('#movie-template').html();
@@ -150,13 +108,11 @@ function printMoviesAndSeries(array, url) {
     var stars = getStars(voteFinal);
     var languageFlag = getFlagLang(array[i].original_language);
     var poster = getThePoster(array[i].poster_path);
-    // var genre;
-    // var cast;
 
     // Completo il template con un oggetto contente le info utili,
     // racchiuse negli oggeti risultanti da API
     // Qui completo per le serie tv
-    if(url.includes('tv') ) {
+    if(type == 'tv') {
       var title = array[i].name;
       var originalTitle = array[i].original_name;
     }
@@ -174,100 +130,51 @@ function printMoviesAndSeries(array, url) {
       poster: poster,
       overview: array[i].overview,
       id: array[i].id,
-      // genre: genre,
-      // cast_member: cast
     };
 
     var html = template(context);
 
     // Appendo poi il template al container
     $('.movie-container').append(html);
+
+    getGenreAndCast(type, api_key, array[i].id);
   }
 
   // Alla fine resetto il paceholder dell'input
-  $('input').val(''); //------------ TODO: rendere dinamico?
+  $('input').val('');
 }
 
 // Funzione che cerca e aggiunge i generi e gli attori dei film/serie stampati
 //
-function getGenre(array, url, api_key) {
-  // Cerco l'id nell'array
-  for (var i = 0; i < array.length; i++) {
-    var id = array[i].id;
+function getGenreAndCast(type, api_key, id) {
 
-    // Faccio una chiamata ajax
-    if(url.includes('tv')) {
-      // chiamata ajax in serie
-      // con valore query e id nell'url
-      var urlGenre = 'https://api.themoviedb.org/3/tv/' + id;
-
-      $.ajax(
-        {
-          url: urlGenre,
-          method: 'GET',
-          data: {
-            api_key: api_key,
-          },
-          success: function(response) {
-            var genre = response.genres;
-
-            getCredits(urlGenre, genre, api_key);
-            return genre;
-          },
-          error: function() {
-            // ALERT di errore
-          }
-        }
-      );
-    }
-    else {
-      // chiamata ajax in movie
-      // con valore query e id nell'url
-      var urlGenre = 'https://api.themoviedb.org/3/movie/' + id;
-
-      $.ajax(
-        {
-          url: urlGenre,
-          method: 'GET',
-          data: {
-            api_key: api_key,
-          },
-          success: function(response) {
-            var genre = response;
-
-            getCredits(urlGenre, genre, api_key);
-          },
-          error: function() {
-            // ALERT di errore
-          }
-        }
-      );
-    }
-  }
-};
-
-function getCredits(url, arrayGenre, api_key) {
   // Faccio una chiamata ajax
+  var url = 'https://api.themoviedb.org/3/' + type + '/' + id;
+
   $.ajax(
     {
-      url: url + '/credits',
+      url: url,
       method: 'GET',
       data: {
         api_key: api_key,
+        append_to_response: 'credits',
       },
-      success: function(response) {
-        var cast = response;
+      success: function(responseData) {
+        var arrayGenre = responseData.genres;
+        var cast = responseData.credits;
+        var arrayCast = cast.cast;
 
-        printGenreAndCredits(arrayGenre, cast);
+        printGenreAndCast(arrayGenre, arrayCast, id);
       },
       error: function() {
-
+        // ALERT di errore
       }
     }
   );
-}
 
-function printGenreAndCredits(arrayGenre, arrayCast) {
+};
+
+function printGenreAndCast(arrayGenre, arrayCast, id) {
   // Con handlebars copio il template della scheda film
   var source = $('#genre-cast-template').html();
   var template = Handlebars.compile(source);
@@ -276,41 +183,13 @@ function printGenreAndCredits(arrayGenre, arrayCast) {
   var arrayGenreFinale = [];
 
   for (var i = 0; i < 5; i++) {
-
-    var arrayGenreFocus = arrayGenre.genres;
-    var arrayCastFocus = arrayCast.cast;
-
-    if(arrayGenreFocus[i] == undefined && arrayCastFocus[i] != undefined) {
-      arrayCastFinale.push(arrayCastFocus[i].name);
-      // var context = {
-      //   cast: arrayCastFocus[i].name,
-      // }
-      console.log(arrayCastFocus[i].name);
-
-      // var html = template(context);
-    }
-    //
-    else if(arrayCastFocus[i] == undefined && arrayGenreFocus[i] != undefined) {
-      arrayGenreFinale.push(arrayGenreFocus[i].name);
-      // var context = {
-      //   genre: arrayGenreFocus[i].name,
-      // }
-      console.log(arrayGenreFocus[i].name);
-
-      // var html = template(context);
-    }
-    //
-    else if(arrayCastFocus[i] != undefined && arrayGenreFocus[i] != undefined) {
-      arrayCastFinale.push(arrayCastFocus[i].name);
-      arrayGenreFinale.push(arrayGenreFocus[i].name);
-      // var context = {
-      //   genre: arrayGenreFocus[i].name,
-      //   cast: arrayCastFocus[i].name,
-      // }
-      console.log(arrayGenreFocus[i].name);
-      console.log(arrayCastFocus[i].name);
-    }
+    arrayCastFinale.push(arrayCast[i].name);
   }
+
+  for (var i = 0; i < arrayGenre.length; i++) {
+    arrayGenreFinale.push(arrayGenre[i].name)
+  }
+
   var context = {
     genre: arrayGenreFinale,
     cast: arrayCastFinale,
@@ -318,8 +197,8 @@ function printGenreAndCredits(arrayGenre, arrayCast) {
 
   var html = template(context);
   // Appendo poi il template al container
-  $('.movie-info[data-id="' + arrayCast.id + '"]').append(html);
-  // console.log(arrayCast[i].id);
+  $('.movie-info[data-id="' + id + '"]').append(html);
+
 }
 
 
